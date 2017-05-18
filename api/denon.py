@@ -4,29 +4,68 @@ Denon telnet api client
 """
 
 import socket
+import utils
+import time
 
 class Client(object):
-    def __init__(self, host, port):
+    def __init__(self, host, port=23):
         """Create new client"""
         self.host = host
         self.port = port
 
-    def call(self, command, params=""):
+    def call(self, command, params="", result_count=1):
         """Connect to denon and send command, receive response"""
-        conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        conn.connect((self.host, self.port))
+        # Connect to amp with short timeout in case
+        # the host is unresponsive.
+        conn = socket.create_connection((self.host, self.port),
+                                        timeout=10)
 
         # Send command
         tx = conn.send("{}{}\r".format(command, params))
+        print("TX: {}{}".format(command,params))
         if tx == 0:
             raise RuntimeError("connection lost")
 
+        result = []
+
         # Receive response
-        res = conn.recv(256)
-        if res == b'':
-            raise RuntimeError("connection lost")
+        try:
+            for _ in range(result_count):
+                res = conn.recv(256)
+                if not res:
+                    break
+                result.append(res)
+        except socket.timeout as e:
+            result = ["0"]
 
         conn.close()
 
-        return res
+        return result
+
+
+    def get_master_volume(self):
+        """Read the master volume"""
+        res = self.call("MV?")
+        return utils.numeric_value(res[0])
+
+
+    def set_master_volume(self, value):
+        """Sets the master volume"""
+        # Limit value to allowed range
+        value = utils.limit_range(0, 98, value)
+
+        # The amp hangs if the value does not change.
+        # So, check the value before sending the command.
+        value = utils.round_halfstep(value)
+        current_value = self.get_master_volume()
+        if value == current_value:
+            return value
+
+        # Wait a bit
+        time.sleep(0.1)
+
+        # Set volume
+        res = self.call("MV", utils.pack_float(value))
+        return utils.numeric_value(res[0])
+
 
