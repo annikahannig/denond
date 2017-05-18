@@ -15,14 +15,14 @@ class Client(object):
 
     def call(self, command, params="", result_count=1):
         """Connect to denon and send command, receive response"""
-        # Connect to amp with short timeout in case
-        # the host is unresponsive.
+        # Connect to amp with short timeout:
+        # "The RESPONSE should be sent within 200ms of
+        # receiving the COMMAND."
         conn = socket.create_connection((self.host, self.port),
-                                        timeout=10)
+                                        timeout=0.25)
 
         # Send command
         tx = conn.send("{}{}\r".format(command, params))
-        print("TX: {}{}".format(command,params))
         if tx == 0:
             raise RuntimeError("connection lost")
 
