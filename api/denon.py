@@ -62,7 +62,7 @@ class Client(object):
             return value
 
         # Wait a bit
-        time.sleep(0.1)
+        time.sleep(0.135)
 
         # Set volume
         res = self.call("MV", utils.pack_float(value))

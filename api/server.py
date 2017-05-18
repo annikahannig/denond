@@ -21,8 +21,18 @@ def api_welcome():
 
 
 @app.route('/api/volume/master')
-def api_master_volume():
-    """Get and set master volume"""
+def api_get_master_volume():
+    """Get master volume"""
+    volume = client.get_master_volume()
+    return jsonify({"volume": { "master": volume }})
+
+
+@app.route('/api/volume/master', methods=['POST'])
+def api_set_master_volume():
+    """Set master volume"""
+    params = request.get_json(force=True)
+    result = client.set_master_volume(params['volume'])
+    return jsonify({"volume": { "master": result }})
 
 
 
