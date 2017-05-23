@@ -7,6 +7,17 @@ import socket
 import utils
 import time
 
+
+COMMAND_TIMEOUT = 0.135
+
+MAIN_ZONE_ON  = "ON"
+MAIN_ZONE_OFF = "OFF"
+
+
+class AmpOfflineException(Exception):
+    pass
+
+
 class Client(object):
     def __init__(self, host, port=23):
         """Create new client"""
@@ -25,12 +36,12 @@ class Client(object):
             conn = socket.create_connection((self.host, self.port),
                                             timeout=0.20)
         except:
-            return self.get_cached(command)
+            raise AmpOfflineException()
 
         # Send command
         tx = conn.send("{}\r".format(command))
         if tx == 0:
-            raise RuntimeError("connection lost")
+            return self.get_cached(command)
 
         result = []
 
@@ -50,6 +61,23 @@ class Client(object):
         self.cache[command] = result
 
         return result
+
+
+    def cast(self, command):
+        """Send a command without awaiting any response"""
+        try:
+            conn = socket.create_connection((self.host, self.port),
+                                            timeout=0.20)
+        except:
+            return False
+
+        # Send command
+        tx = conn.send("{}\r".format(command))
+        if tx == 0:
+            return False
+
+        conn.close()
+        return True # We are done
 
 
     def get_cached(self, command):
@@ -76,10 +104,47 @@ class Client(object):
             return value
 
         # Wait a bit
-        time.sleep(0.135)
+        time.sleep(COMMAND_TIMEOUT)
 
         # Set volume
-        res = self.call("MV" + utils.pack_float(value))
-        return utils.numeric_value(res[0])
+        self.cast("MV" + utils.pack_float(value))
+        return value
 
 
+    def get_main_zone_on(self):
+        """Query main zone status"""
+        try:
+            res = self.call("ZM?")
+            is_on = utils.boolean_value(res[0])
+        except AmpOfflineException:
+            is_on = False
+
+        return is_on
+
+
+    def set_main_zone_state(self, state):
+        """Set main zone ON or OFF"""
+        self.cast("ZM" + state)
+
+
+    def get_main_zone_source(self):
+        """Get selected input source"""
+        res = self.call("SI?")
+        return utils.string_value(res[0])
+
+
+    def get_main_zone_state(self):
+        """Get main zone state: on/off, volume and source"""
+        on = self.get_main_zone_on()
+        time.sleep(COMMAND_TIMEOUT)
+        volume = self.get_master_volume()
+        time.sleep(COMMAND_TIMEOUT)
+        source = self.get_main_zone_source()
+
+        state = {
+            "on": on,
+            "volume": volume,
+            "source": source
+        }
+
+        return state
