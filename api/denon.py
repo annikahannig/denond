@@ -13,16 +13,22 @@ class Client(object):
         self.host = host
         self.port = port
 
-    def call(self, command, params="", result_count=1):
+        self.cache = dict() # Cache responses
+
+
+    def call(self, command, result_count=1):
         """Connect to denon and send command, receive response"""
         # Connect to amp with short timeout:
         # "The RESPONSE should be sent within 200ms of
         # receiving the COMMAND."
-        conn = socket.create_connection((self.host, self.port),
-                                        timeout=0.25)
+        try:
+            conn = socket.create_connection((self.host, self.port),
+                                            timeout=0.20)
+        except:
+            return self.get_cached(command)
 
         # Send command
-        tx = conn.send("{}{}\r".format(command, params))
+        tx = conn.send("{}\r".format(command))
         if tx == 0:
             raise RuntimeError("connection lost")
 
@@ -36,11 +42,19 @@ class Client(object):
                     break
                 result.append(res)
         except socket.timeout as e:
-            result = ["0"]
+            return self.get_cached(command)
 
         conn.close()
 
+        # cache response
+        self.cache[command] = result
+
         return result
+
+
+    def get_cached(self, command):
+        """Get cached response"""
+        return self.cache.get(command)
 
 
     def get_master_volume(self):
@@ -65,7 +79,7 @@ class Client(object):
         time.sleep(0.135)
 
         # Set volume
-        res = self.call("MV", utils.pack_float(value))
+        res = self.call("MV" + utils.pack_float(value))
         return utils.numeric_value(res[0])
 
 
