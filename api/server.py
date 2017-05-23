@@ -14,7 +14,6 @@ app = Flask(__name__)
 client = denon.Client("172.23.42.28")
 
 
-
 @app.route('/')
 def api_welcome():
     return "Denond API {}".format(__version__)
@@ -35,6 +34,11 @@ def api_set_master_volume():
     return jsonify({"volume": { "master": result }})
 
 
+@app.route("/api/mainzone/state")
+def get_main_zone_state():
+    """Get main zone status"""
+    result = client.get_main_zone_state()
+    return jsonify({"state": result})
 
 if __name__ == '__main__':
     app.run(debug=True)
