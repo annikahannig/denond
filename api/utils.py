@@ -34,3 +34,13 @@ def numeric_value(value):
     if val > 100:
         val = val / 10.0
     return val
+
+
+def boolean_value(value):
+    """Get boolean value from response"""
+    return "ON" in value
+
+
+def string_value(value):
+    return value[2:].strip()
+
