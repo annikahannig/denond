@@ -14,6 +14,12 @@ app = Flask(__name__)
 client = denon.Client("172.23.42.28")
 
 
+@app.errorhandler(denon.AmpOfflineException)
+def handle_amp_offline(err):
+    response = jsonify({"error": "amp offline"})
+    response.status_code = 500
+    return response
+
 @app.route('/')
 def api_welcome():
     return "Denond API {}".format(__version__)
