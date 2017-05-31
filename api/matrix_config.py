@@ -7,6 +7,8 @@ Create an audiomatrix setup and map it to
 query params sent to the web config interface.
 """
 
+import yaml
+
 # Inputs:
 INPUT_HDMI     = 'Hdmi'
 INPUT_DIGITAL  = 'Digital'
@@ -69,7 +71,27 @@ class MatrixConfig(object):
                         for inp    in self.inputs}
 
 
-    def set_input(source, inp):
+    def set_input(self, source, inp, value):
         """Assign input to source"""
         key = "list{}Assign{}".format(inp, source)
-        self.mapping[key] = inp
+        self.mapping[key] = value
+
+
+    def save(self, filename):
+        """Dump the mapping into a file"""
+        with open(filename, 'w+') as f:
+            yaml.dump(self.mapping, stream=f)
+
+
+    def load(self, filename):
+        """Load the mapping from a file"""
+        with open(filename, 'r') as f:
+            self.mapping = yaml.load(f)
+
+    @staticmethod
+    def from_file(filename):
+        """Create a matrix config instance"""
+        mat = MatrixConfig()
+        mat.load(filename)
+        return mat
+
