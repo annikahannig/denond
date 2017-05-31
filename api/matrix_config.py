@@ -8,11 +8,11 @@ query params sent to the web config interface.
 """
 
 # Inputs:
-INPUT_HDMI     = 'listHdmi'
-INPUT_DIGITAL  = 'listDigital'
-INPUT_ANALOG   = 'listAnalog'
-INPUT_COMP     = 'listComp'
-INPUT_VIDEO    = 'listVideo'
+INPUT_HDMI     = 'Hdmi'
+INPUT_DIGITAL  = 'Digital'
+INPUT_ANALOG   = 'Analog'
+INPUT_COMP     = 'Comp'
+INPUT_VIDEO    = 'Video'
 
 # Sources:
 SOURCE_SAT_CBL      = 'SAT/CBL'
@@ -48,6 +48,8 @@ VIDEO_1   = 'VD1'
 VIDEO_2   = 'VD2'
 VIDEO_OFF = 'OFF'
 
+# General off
+OFF = 'OFF'
 
 
 class MatrixConfig(object):
@@ -55,12 +57,19 @@ class MatrixConfig(object):
 
     def __init__(self):
         """Initialize new matrix"""
-        inputs = [INPUT_HDMI, INPUT_DIGITAL, INPUT_ANALOG,
-                  INPUT_COMP, INPUT_VIDEO]
+        self.inputs = [INPUT_HDMI, INPUT_DIGITAL, INPUT_ANALOG,
+                       INPUT_COMP, INPUT_VIDEO]
 
-        sources = [SOURCE_SAT_CBL, SOURCE_DVD, SOURCE_BLUERAY,
-                   SOURCE_GAME, SOURCE_MEDIA_PLAYER, SOURCE_TV,
-                   SOURCE_AUX, SOURCE_CD]
+        self.sources = [SOURCE_SAT_CBL, SOURCE_DVD, SOURCE_BLUERAY,
+                        SOURCE_GAME, SOURCE_MEDIA_PLAYER, SOURCE_TV,
+                        SOURCE_AUX, SOURCE_CD]
 
-        mapping = {}
+        self.mapping = {"list{}Assign{}".format(inp, source): OFF
+                        for source in self.sources
+                        for inp    in self.inputs}
 
+
+    def set_input(source, inp):
+        """Assign input to source"""
+        key = "list{}Assign{}".format(inp, source)
+        self.mapping[key] = inp
