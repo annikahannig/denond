@@ -6,6 +6,7 @@ Denon telnet api client
 import socket
 import utils
 import time
+import requests
 
 
 COMMAND_TIMEOUT = 0.135
@@ -78,6 +79,27 @@ class Client(object):
 
         conn.close()
         return True # We are done
+
+
+    def write_matrix_config(self, matrix):
+        """Write an audio matrix configuration"""
+        base_path = 'SETUP/INPUTS/INPUTASSIGN'
+        endpoints = ['s_InputAssignHDMI.asp',
+                     's_InputAssignDIGITAL.asp',
+                     's_InputAssignCOMP.asp',
+                     's_InputAssignANALOG.asp',
+                     's_InputAssignVIDEO.asp']
+
+        base_url = 'http://{}/{}'.format(self.host, base_path)
+
+        for endpoint in endpoints:
+            params = matrix.mapping
+            params['setPureDirectOn'] = 'OFF'
+            params['setSetupLock'] = 'OFF'
+
+            url = "{}/{}".format(base_url, endpoint)
+            res = requests.post(url, data=params)
+            print(res)
 
 
     def get_cached(self, command):
