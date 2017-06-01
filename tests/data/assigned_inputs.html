@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<META http-equiv="Pragma" content="no-cache" />
+<META http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<META http-equiv="Expires" content="-1" />
+<META http-equiv="Content-Type" CONTENT="text/html; charset=utf-8">
+<meta http-equiv="content-style-type" content="text/css">
+<link rel="stylesheet" href="/goform/formCssDefault.css" type="text/css">
+<TITLE>Setup Menu</TITLE>
+</HEAD>
+<script language="javaScript1.2">
+<!--
+
+	window.onload = function() {
+		if(document.InputAssign.setPureDirectOn.value == "ON"){
+			location.href = "../../18_OTHERS/d_othersPureDirect.asp";
+		}else if(document.InputAssign.setSetupLock.value == "ON"){
+			location.href = "../../18_OTHERS/d_othersSetupLock.asp";
+		}
+	}
+
+	function refreshHref() {
+		location.href = this.location.href;
+	}
+
+	function listBoxHDMI()	{
+		document.InputAssign.action = "./s_InputAssignHDMI.asp";
+		InputAssignSubmit();
+	}
+
+	function listBoxDIGITAL()	{
+		document.InputAssign.action = "./s_InputAssignDIGITAL.asp";
+		InputAssignSubmit();
+	}
+
+	function listBoxCOMP()	{
+		document.InputAssign.action = "./s_InputAssignCOMP.asp";
+		InputAssignSubmit();
+	}
+
+	function listBoxANALOG()	{
+		document.InputAssign.action = "./s_InputAssignANALOG.asp";
+		InputAssignSubmit();
+	}
+
+	function listBoxVIDEO()	{
+		document.InputAssign.action = "./s_InputAssignVIDEO.asp";
+		InputAssignSubmit();
+	}
+
+	function InputAssignSubmit() {
+		document.InputAssign.submit();
+	}
+// -->
+</script>
+
+<body bgcolor="#222222">
+<FORM name="InputAssign" action="s_InputAssign.asp" method="POST" target="_self">
+
+<INPUT type='hidden' name='setPureDirectOn' value='OFF'>
+<INPUT type='hidden' name='setSetupLock' value='OFF'>
+
+<div class='Icon'><img src="../../../img/Setup_Inputs_Blue.png"></div><div class="Title">Inputs/Input Assign</div>
+<HR size="2">
+
+<table width="700" height="360" border="0">
+  <tr>
+    <td width="200"><INPUT type='submit' name='defBtnInputAssign' value='Set Defaults'></td>
+    <td width="100"><B><font size="4">HDMI</font></B></td>
+    <td width="100"><B><font size="4">DIGITAL</font></B></td>
+    <td width="100"><B><font size="4">ANALOG</font></B></td>
+    <td width="100"><B><font size="4">COMP</font></B></td>
+    <td width="100"><B><font size="4">VIDEO</font></B></td>
+  </tr>
+
+  <tr>
+	<TD><B>CBL/SATT</B></td>
+	<TD><select size='1' name='listHdmiAssignSAT/CBL' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3' selected>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF'>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignSAT/CBL' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignSAT/CBL' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignSAT/CBL' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignSAT/CBL' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+	<TD><B>DVD</B></td>
+	<TD><select size='1' name='listHdmiAssignDVD' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignDVD' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignDVD' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignDVD' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignDVD' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+	<TD><B>Blu-ray</B></td>
+	<TD><select size='1' name='listHdmiAssignBD' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignBD' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1' selected>OPT</OPTION><OPTION value='OFF'>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignBD' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignBD' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignBD' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+	<TD><B>GAME</B></td>
+	<TD><select size='1' name='listHdmiAssignGAME' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7' selected>Front</OPTION><OPTION value='OFF'>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignGAME' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignGAME' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignGAME' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1' selected>COMP</OPTION><OPTION value='OFF'>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignGAME' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+    <TD><B>MEDIA PLAYER</B></td>
+    <TD><select size='1' name='listHdmiAssignMPLAY' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignMPLAY' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignMPLAY' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3' selected>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF'>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignMPLAY' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignMPLAY' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+	<TD><B>TV AUDIO</B></td>
+	<TD><select size='1' name='listHdmiAssignTV' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignTV' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignTV' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignTV' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignTV' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+ </tr>
+
+  <tr>
+	<TD><B>AUX</B></td>
+	<TD><select size='1' name='listHdmiAssignAUX1' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignAUX1' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignAUX1' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignAUX1' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignAUX1' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+  <tr>
+	<TD></td>
+	<TD></td>
+	<TD></td>
+	<TD></td>
+	<TD></td>
+	<TD></td>
+  </tr>
+
+  <tr>
+    <TD><B>CD</B></td>
+    <TD><select size='1' name='listHdmiAssignCD' onchange='listBoxHDMI()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='HD1'>HDMI1</OPTION><OPTION value='HD2'>HDMI2</OPTION><OPTION value='HD3'>HDMI3</OPTION><OPTION value='HD4'>HDMI4</OPTION><OPTION value='HD5'>HDMI5</OPTION><OPTION value='HD6'>HDMI6</OPTION><OPTION value='HD7'>Front</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listDigitalAssignCD' onchange='listBoxDIGITAL()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='CO1'>COAX</OPTION><OPTION value='OP1'>OPT</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listAnalogAssignCD' onchange='listBoxANALOG()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='AN1'>Analog1</OPTION><OPTION value='AN2'>Analog2</OPTION><OPTION value='AN3'>Analog3</OPTION><OPTION value='AN4'>Analog4</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listCompAssignCD' onchange='listBoxCOMP()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='IN1'>COMP</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+	<TD><select size='1' name='listVideoAssignCD' onchange='listBoxVIDEO()'STYLE='COLOR:#F5F5F5; background-color:#000000'><OPTION value='VD1'>Video1</OPTION><OPTION value='VD2'>Video2</OPTION><OPTION value='OFF' selected>None</OPTION></SELECT></td>
+  </tr>
+
+
+</table>
+
+</form>
+</body>
+</html>
