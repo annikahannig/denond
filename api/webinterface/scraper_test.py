@@ -18,4 +18,8 @@ def test_parse_assigned_inputs():
     html = _read_sample_data("assigned_inputs.html")
     mapping = scraper.parse_assigned_inputs(html)
 
+    expected = [('listHdmiAssignBD', 'OFF'),
+                ('listHdmiAssignSAT/CBL', 'HD3')]
 
+    for (k, v) in expected:
+        assert mapping[k] == v
