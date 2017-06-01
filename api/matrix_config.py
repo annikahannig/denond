@@ -91,9 +91,17 @@ class MatrixConfig(object):
         b = matrix.mapping
         diff = {k: v
                 for (k, v) in self.mapping.items()
-                if v != b.get(k)}
+                if str(v) != str(b.get(k))}
 
         return MatrixConfig(diff)
+
+
+    def get_input_mapping(self, inp):
+        """Get input specific mapping"""
+        input_set = {k: v
+                     for (k, v) in self.mapping.items()
+                     if k.startswith("list{}".format(inp))}
+        return input_set
 
 
     def save(self, filename):

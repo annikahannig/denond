@@ -8,6 +8,8 @@ import utils
 import time
 import requests
 
+import matrix_config
+
 from webinterface import scraper
 from matrix_config import MatrixConfig
 
@@ -92,16 +94,31 @@ class Client(object):
                      's_InputAssignANALOG.asp',
                      's_InputAssignVIDEO.asp']
 
+        inputs = [matrix_config.INPUT_HDMI,
+                  matrix_config.INPUT_DIGITAL,
+                  matrix_config.INPUT_COMP,
+                  matrix_config.INPUT_ANALOG,
+                  matrix_config.INPUT_VIDEO]
+
         base_url = 'http://{}/{}'.format(self.host, base_path)
 
-        for endpoint in endpoints:
-            params = matrix.mapping
+
+        for inp, endpoint in zip(inputs, endpoints):
+            url = "{}/{}".format(base_url, endpoint)
+
+            params = matrix.get_input_mapping(inp)
+
+            if not params:
+                continue
+
             params['setPureDirectOn'] = 'OFF'
             params['setSetupLock'] = 'OFF'
 
-            url = "{}/{}".format(base_url, endpoint)
-            res = requests.post(url, data=params)
-            print(res)
+            for _, _ in params.items():
+                print(inp)
+                print(params)
+                res = requests.post(url, data=params)
+                print(res)
 
 
     def read_matrix_config(self):
@@ -115,6 +132,17 @@ class Client(object):
 
         config = MatrixConfig(matrix)
         return config
+
+
+    def update_matrix_config(self, matrix):
+        """Write diff of matrix config"""
+        current = self.read_matrix_config()
+        print("curr")
+        print(current.mapping)
+        diff = matrix.diff(current)
+        print("diff")
+        print(diff.mapping)
+        self.write_matrix_config(diff)
 
 
     def get_cached(self, command):
