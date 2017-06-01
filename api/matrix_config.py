@@ -86,6 +86,15 @@ class MatrixConfig(object):
         self.mapping[key] = value
 
 
+    def diff(self, matrix):
+        """Diff current mapping"""
+        b = matrix.mapping
+        diff = {k: v
+                for (k, v) in self.mapping.items()
+                if v != b.get(k)}
+
+        return diff
+
     def save(self, filename):
         """Dump the mapping into a file"""
         with open(filename, 'w+') as f:
