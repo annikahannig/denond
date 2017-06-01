@@ -93,7 +93,8 @@ class MatrixConfig(object):
                 for (k, v) in self.mapping.items()
                 if v != b.get(k)}
 
-        return diff
+        return MatrixConfig(diff)
+
 
     def save(self, filename):
         """Dump the mapping into a file"""

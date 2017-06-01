@@ -16,7 +16,8 @@ def test_diff():
         'b': 'baz',
     })
 
-    diff = m1.diff(m2)
+    diffm = m1.diff(m2)
+    diff = diffm.mapping
 
     assert diff.get('a') == None
     assert diff.get('b') == 'bar'
