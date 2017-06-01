@@ -8,6 +8,8 @@ import utils
 import time
 import requests
 
+from webinterface import scraper
+from matrix_config import MatrixConfig
 
 COMMAND_TIMEOUT = 0.135
 
@@ -100,6 +102,19 @@ class Client(object):
             url = "{}/{}".format(base_url, endpoint)
             res = requests.post(url, data=params)
             print(res)
+
+
+    def read_matrix_config(self):
+        """Read an audio matrix configuration"""
+        endpoint = 'http://{}/{}'.format(
+            self.host,
+            'SETUP/INPUTS/INPUTASSIGN/d_InputAssign.asp')
+
+        html = requests.get(endpoint).text
+        matrix = scraper.parse_assigned_inputs(html)
+
+        config = MatrixConfig(matrix)
+        return config
 
 
     def get_cached(self, command):

@@ -64,7 +64,7 @@ OFF = 'OFF'
 class MatrixConfig(object):
     """Represent the audiomatrix configuration"""
 
-    def __init__(self):
+    def __init__(self, mapping=None):
         """Initialize new matrix"""
         self.inputs = [INPUT_HDMI, INPUT_DIGITAL, INPUT_ANALOG,
                        INPUT_COMP, INPUT_VIDEO]
@@ -73,9 +73,11 @@ class MatrixConfig(object):
                         SOURCE_GAME, SOURCE_MEDIA_PLAYER, SOURCE_TV,
                         SOURCE_AUX, SOURCE_CD]
 
-        self.mapping = {"list{}Assign{}".format(inp, source): OFF
+        if not mapping:
+            mapping = {"list{}Assign{}".format(inp, source): OFF
                         for source in self.sources
                         for inp    in self.inputs}
+        self.mapping = mapping
 
 
     def set_input(self, source, inp, value):
@@ -87,13 +89,16 @@ class MatrixConfig(object):
     def save(self, filename):
         """Dump the mapping into a file"""
         with open(filename, 'w+') as f:
-            yaml.dump(self.mapping, stream=f)
+            yaml.safe_dump(self.mapping,
+                           default_flow_style=False,
+                           stream=f)
 
 
     def load(self, filename):
         """Load the mapping from a file"""
         with open(filename, 'r') as f:
             self.mapping = yaml.load(f)
+
 
     @staticmethod
     def from_file(filename):
