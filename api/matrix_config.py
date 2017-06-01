@@ -26,7 +26,7 @@ SOURCE_TV           = 'TV'
 SOURCE_AUX          = 'AUX1'
 SOURCE_CD           = 'CD'
 
-# HDMI inputs:
+# HDMI inputs
 HDMI_1     = 'HD1'
 HDMI_2     = 'HD2'
 HDMI_3     = 'HD3'
@@ -35,6 +35,13 @@ HDMI_5     = 'HD5'
 HDMI_6     = 'HD6'
 HDMI_FRONT = 'HD7'
 HDMI_OFF   = 'OFF'
+
+# ANALOG inputs
+ANALOG_1   = 'AN1'
+ANALOG_1   = 'AN1'
+ANALOG_1   = 'AN1'
+ANALOG_1   = 'AN1'
+ANALOG_OFF = 'OFF'
 
 # DIGITAL Inputs
 DIGITAL_COAX = 'CO1'
