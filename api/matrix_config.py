@@ -61,6 +61,11 @@ VIDEO_OFF = 'OFF'
 OFF = 'OFF'
 
 
+def assign_input_source_key(inp, source):
+    """Assign input to source mapping key"""
+    return "list{}Assign{}".format(inp, source)
+
+
 class MatrixConfig(object):
     """Represent the audiomatrix configuration"""
 
@@ -74,7 +79,7 @@ class MatrixConfig(object):
                         SOURCE_AUX, SOURCE_CD]
 
         if mapping == None:
-            mapping = {"list{}Assign{}".format(inp, source): OFF
+            mapping = {assign_input_source_key(inp, source): OFF
                         for source in self.sources
                         for inp    in self.inputs}
         self.mapping = mapping
@@ -82,7 +87,7 @@ class MatrixConfig(object):
 
     def set_input(self, source, inp, value):
         """Assign input to source"""
-        key = "list{}Assign{}".format(inp, source)
+        key = assign_input_source_key(inp, source)
         self.mapping[key] = value
 
 
