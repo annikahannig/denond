@@ -15,3 +15,6 @@ def test_parse_assigned_inputs():
 
     for (k, v) in expected:
         assert mapping[k] == v
+
+    # There should be 5 * 8 keys
+    assert len(mapping) == 40
