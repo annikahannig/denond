@@ -137,11 +137,7 @@ class Client(object):
     def update_matrix_config(self, matrix):
         """Write diff of matrix config"""
         current = self.read_matrix_config()
-        print("curr")
-        print(current.mapping)
         diff = matrix.diff(current)
-        print("diff")
-        print(diff.mapping)
         self.write_matrix_config(diff)
 
 
