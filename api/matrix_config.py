@@ -110,16 +110,18 @@ class MatrixConfig(object):
             yaml.safe_dump(self.mapping,
                            default_flow_style=False,
                            stream=f)
+        return self
 
     def load(self, filename):
         """Load the mapping from a file"""
         with open(filename, 'r') as f:
-            self.read(f)
+            return self.read(f)
 
 
     def read(self, data):
         """Read yaml data"""
         self.mapping = yaml.load(data)
+        return self
 
     @staticmethod
     def from_file(filename):
