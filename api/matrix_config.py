@@ -73,7 +73,7 @@ class MatrixConfig(object):
                         SOURCE_GAME, SOURCE_MEDIA_PLAYER, SOURCE_TV,
                         SOURCE_AUX, SOURCE_CD]
 
-        if not mapping:
+        if mapping == None:
             mapping = {"list{}Assign{}".format(inp, source): OFF
                         for source in self.sources
                         for inp    in self.inputs}
