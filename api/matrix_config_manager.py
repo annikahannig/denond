@@ -11,7 +11,7 @@ import denon
 
 from utils import Service
 
-
+import matrix_config
 
 class ConfigUploader(Service):
     """Handle Uploads"""
@@ -24,8 +24,15 @@ class ConfigUploader(Service):
     def handle_cast(self, action):
         """Just start the upload"""
         self.parent.cast(('UPLOAD_START', None))
-        print("Uploading " + action)
-        time.sleep(5)
+
+        # Load config
+        conf = matrix_config.MatrixConfig.from_file(action)
+        try:
+            self.client.write_matrix_config(conf)
+        except Exception as e:
+            self.parent.cast(('UPLOAD_ERROR', str(e)))
+            return
+
         self.parent.cast(('UPLOAD_DONE', None))
 
 
@@ -52,6 +59,7 @@ class ConfigManager(Service):
 
         # State
         self.is_uploading = False
+        self.upload_error = None
 
 
     def terminate(self):
@@ -74,6 +82,7 @@ class ConfigManager(Service):
         (request, payload) = action
         if request == 'UPLOAD_REQUEST':
             self.is_uploading = True
+            self.upload_error = None
             self.uploader.upload(payload)
         elif request == 'UPLOAD_DONE':
             self.is_uploading = False
@@ -86,6 +95,7 @@ class ConfigManager(Service):
         """Get current upload state"""
         return {
             'is_uploading': self.is_uploading,
+            'error': self.upload_error,
         }
 
 

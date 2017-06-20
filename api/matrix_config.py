@@ -128,6 +128,7 @@ class MatrixConfig(object):
         self.mapping = yaml.load(data)
         return self
 
+
     @staticmethod
     def from_file(filename):
         """Create a matrix config instance"""
