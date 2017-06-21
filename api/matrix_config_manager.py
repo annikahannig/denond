@@ -15,7 +15,7 @@ import matrix_config
 
 class ConfigUploader(Service):
     """Handle Uploads"""
-    def start(self, host):
+    def init(self, host):
         """Initialize service"""
         self.client = denon.Client(host)
         print("[i] Config uploader initialized")
@@ -46,7 +46,7 @@ class ConfigUploader(Service):
 class ConfigManager(Service):
     """Manage audio matrix configurations"""
 
-    def start(self, host, configs_path=None):
+    def init(self, host, configs_path=None):
         """Initialize service"""
         if not configs_path:
             configs_path = os.path.join(os.path.dirname(__file__),

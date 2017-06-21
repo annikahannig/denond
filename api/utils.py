@@ -68,7 +68,7 @@ class Service(object):
         self.runner.start()
 
         # Invoke setup callback
-        self.start(*args, **kwargs)
+        self.init(*args, **kwargs)
 
         return self
 
@@ -123,7 +123,7 @@ class Service(object):
         return self.send(('cast', action))
 
 
-    def start(self):
+    def init(self):
         """Initialize callback"""
         pass
 
