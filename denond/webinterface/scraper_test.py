@@ -3,7 +3,7 @@
 import pytest
 import scraper
 
-from tests.utils import read_sample_data
+from denond.tests.utils import read_sample_data
 
 def test_parse_assigned_inputs():
     """Test assigned inputs extraction"""
