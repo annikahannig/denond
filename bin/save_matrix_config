@@ -4,5 +4,5 @@ cd $(dirname $0)/../
 
 source venv/bin/activate
 
-python save_matrix_config.py
+python save_matrix_config.py $@
 
