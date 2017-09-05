@@ -10,8 +10,8 @@ import requests
 
 from flask import Flask, jsonify, request
 
-import denon
-import matrix_config_manager
+from denond import denon
+from denond import matrix_config_manager
 
 __version__ = "0.1.0"
 

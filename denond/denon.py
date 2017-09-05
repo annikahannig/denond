@@ -115,10 +115,7 @@ class Client(object):
             params['setSetupLock'] = 'OFF'
 
             for _, _ in params.items():
-                print(inp)
-                print(params)
                 res = requests.post(url, data=params)
-                print(res)
 
 
     def read_matrix_config(self):

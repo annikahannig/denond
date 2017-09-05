@@ -1,7 +1,7 @@
 
 import pytest
 
-import matrix_config
+from denond import matrix_config
 
 from tests.utils import read_sample_data
 from webinterface import scraper
