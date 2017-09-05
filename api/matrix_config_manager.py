@@ -50,8 +50,9 @@ class ConfigManager(Service):
         """Initialize service"""
         if not configs_path:
             configs_path = os.path.join(os.path.dirname(__file__),
-                                       '../mappings')
+                                        '../mappings')
 
+        self.host = host
         self.configs_path = configs_path
 
         # Uploader
@@ -73,6 +74,8 @@ class ConfigManager(Service):
         (request, payload) = action
         if request == 'LIST_CONFIGURATIONS':
             return self._fetch_configurations()
+        elif request == 'GET_CURRENT_CONFIGURATIONS':
+            return self._get_current_configuration()
         elif request == 'GET_UPLOAD_STATE':
             return self._get_upload_state()
 
@@ -104,12 +107,38 @@ class ConfigManager(Service):
         return glob(self.configs_path + '/*.yml')
 
 
+    def _get_current_configuration(self):
+        """Load all configs, compare to current"""
+
+        all_configs = [(matrix_config.MatrixConfig.from_file(filename), filename)
+                       for filename in self._fetch_configurations()]
+
+        # Get current matrix settings
+        client = denon.Client(self.host)
+        current = client.read_matrix_config()
+
+        for config, filename in all_configs:
+            if current.diff(config).mapping == {}:
+                return current, filename
+
+        return (None, "unknown")
+
+
     #
     # API
     #
     def list_configurations(self):
         """Return list of available configurations"""
         return self.call(('LIST_CONFIGURATIONS', None))
+
+
+
+    def get_current_matrix_config(self):
+        """
+        Read the audiomatrix config and find the corresponding
+        audio matrix dump on disk
+        """
+        return self.call(('GET_CURRENT_CONFIGURATIONS', None))
 
 
     def upload(self, filename):
@@ -121,3 +150,5 @@ class ConfigManager(Service):
 
     def get_upload_state(self):
         return self.call(('GET_UPLOAD_STATE', None))
+
+

@@ -1,6 +1,6 @@
 
 """
-Denon telnet api client
+Denon telnet api and web "api" client
 """
 
 import socket

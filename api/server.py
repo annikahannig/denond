@@ -31,6 +31,11 @@ def shutdown_server(sig, frame):
     sys.exit(0)
 
 
+def _config_name_from_file(f):
+    """Only get the filename, strip yml"""
+    return os.path.basename(f).replace('.yml', '')
+
+
 @app.errorhandler(denon.AmpOfflineException)
 def handle_amp_offline(err):
     response = jsonify({"error": "amp offline"})
@@ -69,12 +74,20 @@ def get_config_upload_state():
     result = config_manager.get_upload_state()
     return jsonify({"state": result})
 
+
 @app.route("/api/matrix-config/configs")
 def get_audio_matrix_configs():
     result = config_manager.list_configurations()
+    _, current_filename = config_manager.get_current_matrix_config()
+    current_config_name = _config_name_from_file(current_filename)
+
     files = [{'id': i,
-              'name': os.path.basename(f).replace('.yml', '')}
+              'name': _config_name_from_file(f),
+              'selected': _config_name_from_file(f) == current_config_name}
              for i, f in enumerate(result)]
+
+
+
 
     return jsonify({"configs": files})
 
