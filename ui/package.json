@@ -1,9 +1,9 @@
 {
-  "name": "weather95pro",
+  "name": "denond",
   "version": "1.0.0",
-  "description": "A weather app",
+  "description": "A denon app",
   "main": "build/index.html",
-  "repository": "github.com/mhannig/weather95pro",
+  "repository": "github.com/mhannig/denond",
   "author": "Matthias Hannig",
   "license": "MIT",
   "scripts": {

@@ -5,7 +5,16 @@ let config = require('./webpack.config')
 config.devServer = {
   inline: true,
   stats: { colors: true },
-  contentBase: "./build/"
+  contentBase: "./build/",
+
+  proxy: {
+    '/api': {
+        target: 'http://localhost:5000',
+        secure: false
+    }
+  }
+
+
 };
 
 module.exports = config;
