@@ -1,0 +1,54 @@
+
+/api/mainzone/state
+
+{
+  "state": {
+    "on": true, 
+    "source": "DVD", 
+    "volume": 67.5
+  }
+}
+
+
+/api/volume/master
+
+{
+  "volume": {
+    "master": 67.5
+  }
+}
+
+
+/api/matrix-config/upload-state
+
+{
+  "state": {
+    "error": null, 
+     "is_uploading": false
+  }
+}
+
+
+
+/api/matrix-config/configs
+
+{
+  "configs": [
+    {
+      "id": 0, 
+      "name": "club1", 
+      "selected": true
+    }, 
+    {
+      "id": 1, 
+      "name": "off", 
+      "selected": false
+    }, 
+    {
+      "id": 2, 
+      "name": "test", 
+      "selected": false
+    }
+  ]
+}
+
