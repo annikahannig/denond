@@ -4,7 +4,10 @@ module App exposing (main)
 
 -- IMPORTS
 import Messages exposing (Msg(..))
-import Html exposing (Html, div, p, text, program)
+
+import Json.Encode as Encode
+import Html exposing (Html, div, p, text, program, input)
+import Html.Attributes exposing (class, type_, property)
 
 import Layout.Components exposing (applicationView)
 
@@ -32,11 +35,37 @@ init =
     , Cmd.none
     )
 
+
+
+-- TEST
+
+viewStatus : Html Msg
+viewStatus =
+    div [class "amp-status"]
+        [ masterVolume
+        ]
+
+
+
+masterVolume : Html Msg
+masterVolume =
+    div []
+        [ input [ type_ "range"
+                , property "min"  (Encode.int 0)
+                , property "max"  (Encode.int 100)
+                , property "step" (Encode.float 0.5)
+                , class "range-select"
+                ]
+                []
+         ]
+
+
+
 -- VIEW
 view : Model -> Html Msg
 view model =
     applicationView [ div []
-                          [ p [] [text "test"]
+                          [ masterVolume
                           ]
                     ]
 

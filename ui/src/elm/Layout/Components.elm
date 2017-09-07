@@ -17,14 +17,14 @@ applicationView mainView =
        , footer
        ]
                                    
-header : Html msg
+header : Html Msg 
 header =
     div [class "app-header"]
         [h1 [class "navbar navbar-fixed-top navbar-inverse"]
             [text "Denon Pro"]]
 
 
-footer : Html msg
+footer : Html Msg 
 footer =
     div [class "app-footer"]
         [div [class "footer-text"]  
