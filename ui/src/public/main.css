@@ -3,27 +3,35 @@
  * main.css
  */
 
+html, body {
+  background: black;
+}
+
 .app-container {
     display: flex;
     flex-direction: column;
 
     min-height: 100vh;
+    background: black;
 }
 
 .app-header {
     display: flex;
     flex: 0 0;
-    min-height: 40px;
+    min-height: 22px;
 }
 
 .app-header .navbar {
    padding:  2px 12px;
+   background: #00aaaa;
+   color: black;
 }
 
 
 .app-main {
     display: flex;
     flex: 1;
+    flex-direction: row;
 }
 
 .app-footer {
@@ -35,7 +43,7 @@
 
 .app-footer p {
    padding: 0px;
-   margin:  0px 12px;
+   margin:  2px 12px;
    color: #000000;
 }
 
@@ -49,6 +57,23 @@
 
 .footer-text {
     width: 100%;
+}
+
+.content-left {
+  flex: 0 0;
+  flex-basis: 320px;
+  padding: 20px 10px;
+}
+
+.content-main {
+  flex: 1 1;
+  padding: 20px 10px;
+}
+
+.content-right {
+  flex: 0 0;
+  flex-basis: 420px;
+  padding: 20px 10px;
 }
 
 

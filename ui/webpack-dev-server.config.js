@@ -5,7 +5,7 @@ let config = require('./webpack.config')
 config.devServer = {
   inline: true,
   stats: { colors: true },
-  contentBase: "./build/",
+  contentBase: "./src/public/",
 
   proxy: {
     '/api': {
