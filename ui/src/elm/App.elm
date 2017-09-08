@@ -9,7 +9,13 @@ import Messages exposing (Msg(..))
 import Html exposing (Html, div, p, text, program, input)
 import Html.Attributes exposing (class, type_, property)
 
-import Layout.Components exposing (applicationView)
+import Layout.Components exposing ( applicationView
+                                  , frame
+                                  , box
+                                  , BoxColor( BlueBox
+                                            , GreyBox
+                                            )
+                                  )
 
 
 type alias Model = 
@@ -54,6 +60,22 @@ masterVolume =
         ]
 
 
+infoBox : Html Msg
+infoBox =
+    frame Nothing
+          BlueBox
+          [ p [] [text "Today Is Prickel Prickle"]
+          , p [] [text "23:42:42 @ 2017-23-42" ]
+          ]
+
+fooBox : Html Msg
+fooBox =
+    frame (Just "Master Volume")
+    GreyBox
+    [ p [] [text "23.5%"] ]
+    
+
+
 
 -- VIEW
 view : Model -> Html Msg
@@ -66,7 +88,10 @@ view model =
                           ]
                     ]
                     (Just [ div []
-                                [text "Right sidebar"]
+                                [ infoBox
+                                , fooBox
+                                ]
+
                           ]) 
 
 -- UPDATE

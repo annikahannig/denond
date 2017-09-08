@@ -1,8 +1,12 @@
 
-module Layout.Components exposing (applicationView)
+module Layout.Components exposing ( BoxColor(..)
+                                  , applicationView
+                                  , box
+                                  , frame
+                                  )
 
 -- IMPORTS
-import Html exposing (Html, div, p, h1, text)
+import Html exposing (Html, div, p, span, h1, text)
 import Html.Attributes exposing (class)
 
 
@@ -37,6 +41,7 @@ applicationView leftView mainView rightView =
             , footer
             ]
                                    
+
 header : Html Msg 
 header =
     div [class "app-header"]
@@ -49,7 +54,7 @@ footer =
     div [class "app-footer"]
         [div [ class "footer-text" ]  
              [ p [class "pull-left"]
-                 [text "(c) 1993 Computer Club Chaos Systems Inc." ]
+                 [text "(c) 1993 Computer Club Chaos System GmbH" ]
              , p [class "pull-right text-warning"]
                  [text "Unlicensed Copy"]
              ]]
@@ -59,9 +64,42 @@ footer =
 
 {- Helper Components, like frames, boxes and so on -}
 
+type BoxColor = BlueBox
+              | GreyBox
 
 
 
+box : BoxColor -> List (Html Msg) -> Html Msg
+box color content =
+    let
+        cssClass = case color of
+            BlueBox -> "box box-blue"
+            GreyBox -> "box box-grey"
+    in
+        div [ class cssClass ] content
+
+
+
+frame :  Maybe String 
+      -> BoxColor 
+      -> List (Html Msg)
+      -> Html Msg
+frame title color content =
+    let
+        frameTitle = case title of
+            Just t  -> [div [ class "frame-title"] 
+                            [ span [] [text t]
+                            ]
+                       ]
+            Nothing -> []
+
+    in
+        box color 
+            [ div [ class "frame" ]
+                  (  frameTitle 
+                  ++ [div [ class "frame-content" ] content]
+                  )
+            ]
 
 
 
