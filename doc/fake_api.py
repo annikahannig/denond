@@ -28,8 +28,8 @@ class ApiDescription:
     def add_endpoint(self,
                      method,
                      path,
-                     response,
-                     content_type="application/json"):
+                     content_type="application/json",
+                     response=""):
         """
         Create an API endpoint
 
@@ -45,6 +45,9 @@ class ApiDescription:
         :param content_type: The response content type.
                              Default: application/json
         :type content_type: str
+
+        :param response: The actual response
+        :type response: str
 
         :return: returns instance of ApiDescription for chaining
         :rtype: ApiDescription
@@ -78,16 +81,23 @@ class ApiDescription:
         return content
 
 
+    def log_endpoints(self):
+        """Show all registered endpoints"""
+        for method, paths in self.endpoints.items():
+            print(method + ":")
+            for path in paths:
+                print("   " + path)
+            print("")
+
 class FakeApiDescriptionLoader:
 
     def read(self, filename):
         """Load and parse a fake api description"""
-
         with open(filename) as f:
-            return parse_file(f)
+            return self._parse_file(f)
 
-
-    def _parse_endpoint(self, line)
+    def _parse_endpoint(self, line):
+        """Checks if a line is an endpoint description"""
         tokens = line.split()
         if len(tokens) < 2:
             return None
@@ -107,20 +117,46 @@ class FakeApiDescriptionLoader:
 
         return (method, path, content_type)
 
-
     def _parse_file(self, lines):
         """Iterate over all lines and parse file"""
         api_description = ApiDescription()
 
         endpoint = None
-        method = None
-
-        content = None
-        content_type = "application/json"
-
-        is_content = False
+        content = ""
 
         for line in lines:
+            next_endpoint = self._parse_endpoint(line)
+
+            # First endpoint
+            if not endpoint and next_endpoint:
+                endpoint = next_endpoint
+                content = ""
+                continue
+
+            # Subsequent endpoints
+            if next_endpoint and endpoint:
+                # We have a new endpoint, just add
+                # what we found in content to the api
+                api_description.add_endpoint(*endpoint, content)
+
+                # Read next endpoint
+                endpoint = next_endpoint
+                content = ""
+                continue
+
+            # Content
+            if not next_endpoint:
+                # Just add this to content
+                content += line
+
+
+        # Last endpoint:
+        # We are done here, if there was a endpoint left,
+        # add it to the api
+        if endpoint:
+            api_description.add_endpoint(*endpoint, content)
+
+        return api_description
 
 
 class FakeApi:
@@ -140,17 +176,18 @@ class FakeApi:
 
         self.api_description = ApiDescription()
 
-
-
-    def load(self, filename):
+    def load(self, filename, loader=None):
         """
         Load API description from a file
 
         :param filename: The source filename
         :type filename: str
         """
-        self.api_description.add_endpoint("get", "/fnord", "FoooBarBam.")
+        if not loader:
+            # Use default loader
+            loader = FakeApiDescriptionLoader()
 
+        self.api_description = loader.read(filename)
 
     @Request.application
     def handle_request(self, request):
@@ -182,5 +219,6 @@ class FakeApi:
 if __name__ == "__main__":
     fake_api = FakeApi()
     fake_api.load("api.txt")
+    fake_api.api_description.log_endpoints()
     fake_api.run_server()
 
