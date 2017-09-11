@@ -161,7 +161,7 @@ class FakeApiDescriptionLoader:
 
 class FakeApi:
 
-    def __init__(self, host="127.0.0.1", port=7979):
+    def __init__(self, host="127.0.0.1", port=5000):
         """
         Initialize Fake API
 
