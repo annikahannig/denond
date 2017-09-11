@@ -73,6 +73,16 @@ getMatrixConfigs =
             |> Cmd.map MatrixConfigsListResponse
 
 
+
+setMatrixConfig : Int -> Cmd Msg
+setMatrixConfig =
+    let endpoint = "/api/matrix-config/configs"
+    in
+        Http.post endpoint body uploadStateDecoder
+            |> RemoteData.sendRequest
+            |> Cmd.map MatrixConfigUploadStateResponse
+
+
 -- DECODERS / ENCODERS
 
 ampStateDecoder : Decoder AmpState
@@ -107,4 +117,6 @@ audioMatrixConfigDecoder =
         |> required "id" Decode.int
         |> required "name" Decode.string
         |> required "selected" Decode.bool
+
+uploadStateDecoder : Decoder UploadState
 
