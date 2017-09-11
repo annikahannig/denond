@@ -1,6 +1,8 @@
 
-/api/mainzone/state
+-- Denond API v1
+-- For use with fake_api.py
 
+GET /api/mainzone/state
 {
   "state": {
     "on": true, 
@@ -10,8 +12,7 @@
 }
 
 
-/api/volume/master
-
+GET /api/volume/master
 {
   "volume": {
     "master": 67.5
@@ -19,8 +20,15 @@
 }
 
 
-/api/matrix-config/upload-state
+POST /api/volume/master
+{
+  "volume": {
+    "master": 23.0
+  }
+}
 
+
+GET /api/matrix-config/upload-state
 {
   "state": {
     "error": null, 
@@ -30,8 +38,7 @@
 
 
 
-/api/matrix-config/configs
-
+GET /api/matrix-config/configs
 {
   "configs": [
     {
