@@ -3,7 +3,9 @@ module App exposing (main)
 
 
 -- IMPORTS
-import Messages exposing (Msg(..))
+import Messages exposing ( Msg(..)
+                         , getMatrixConfigs
+                         )
 import Model exposing ( Model
                       , AmpState
                       , AudioMatrixConfig
@@ -39,7 +41,7 @@ main =
 
 -- INIT
 init : (Model, Cmd Msg)
-init = (initialModel, Cmd.none)
+init = (initialModel, getMatrixConfigs)
 
 
 

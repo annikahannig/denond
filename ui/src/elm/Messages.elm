@@ -1,5 +1,11 @@
 
-module Messages exposing (Msg(..))
+module Messages exposing ( Msg(..)
+                         , getMasterVolume
+                         , setMasterVolume
+                         , getMatrixConfigs
+                         )
+
+import Debug
 
 import Http
 import Json.Decode as Decode exposing (Decoder)
@@ -58,6 +64,15 @@ setMasterVolume volume =
             |> Cmd.map MasterVolumeResponse
 
 
+getMatrixConfigs : Cmd Msg
+getMatrixConfigs =
+    let endpoint = "/api/matrix-config/configs"
+    in
+        Http.get endpoint apiConfigsDecoder
+            |> RemoteData.sendRequest
+            |> Cmd.map MatrixConfigsListResponse
+
+
 -- DECODERS / ENCODERS
 
 ampStateDecoder : Decoder AmpState
@@ -79,4 +94,17 @@ encodeMasterVolume volume =
         ( object
             [ ("volume", Encode.float volume) ]
         ) 
+
+
+apiConfigsDecoder : Decoder (List AudioMatrixConfig)
+apiConfigsDecoder =
+    Decode.at ["configs"]
+              (Decode.list audioMatrixConfigDecoder)
+        
+audioMatrixConfigDecoder : Decoder AudioMatrixConfig
+audioMatrixConfigDecoder =
+    decode AudioMatrixConfig
+        |> required "id" Decode.int
+        |> required "name" Decode.string
+        |> required "selected" Decode.bool
 
