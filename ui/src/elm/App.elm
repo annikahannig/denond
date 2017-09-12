@@ -5,6 +5,9 @@ module App exposing (main)
 -- IMPORTS
 import Messages exposing ( Msg(..)
                          , getMatrixConfigs
+                         , setMatrixConfig
+                         , getMasterVolume
+                         , getUploadState
                          )
 import Model exposing ( Model
                       , AmpState
@@ -15,9 +18,15 @@ import Model exposing ( Model
                       )
 
 -- import Json.Encode as Encode
+import Task
+import Time exposing (Time)
+import Date exposing (Date)
 import RemoteData exposing (WebData)
-import Html exposing (Html, div, p, text, program, input)
+import Html exposing (Html, div, p, text, program, input, button)
 import Html.Attributes exposing (class, type_, property)
+import Html.Events exposing (onClick)
+
+import Time.Format
 
 import Layout.Components exposing ( applicationView
                                   , frame
@@ -41,34 +50,113 @@ main =
 
 -- INIT
 init : (Model, Cmd Msg)
-init = (initialModel, getMatrixConfigs)
+init = (initialModel, Cmd.batch [ getMatrixConfigs
+                                , getMasterVolume
+                                , getUploadState
+                                , setCurrentTime
+                                ])
 
 
+setCurrentTime : Cmd Msg
+setCurrentTime =
+    Task.perform Tick Time.now
 
--- TEST
 
+-- UI
 viewStatus : Html Msg
 viewStatus =
     div [class "amp-status"]
-        [ masterVolume
+        [ text "amp status" 
         ]
 
 
+audioMatrixSelector : Model -> Html Msg
+audioMatrixSelector model =
+    let
+        isSelected selected =
+            case selected of
+                True -> " (selected)"
+                False -> ""
 
-masterVolume : Html Msg
-masterVolume =
-    div [ class "master-volume-ctrl" ]
-        [ text "Master Volume"
-        ]
+        matrixView audioMatrix =
+            div [ class "audio-matrix" ]
+                [ button [ class "btn btn-matrix-select"
+                         , onClick (SetAudioMatrix audioMatrix.id)
+                         ]
+                         [ text ((toString audioMatrix.id) 
+                                 ++ ": "
+                                 ++ (toString audioMatrix.name)
+                                 ++ (isSelected audioMatrix.isSelected))
+                         ]
+                ]
+    
+        grid configs =
+            div [ class "audio-matrix-grid" ]
+                (List.map matrixView configs)
+
+        selector configs =
+            case configs of
+                RemoteData.NotAsked      -> text "Initializing..."
+                RemoteData.Loading       -> text "Loading..."
+                RemoteData.Failure err   -> text (toString err)
+                RemoteData.Success all   -> grid all
+   
+        updateView = [ p [] [text "Updating AudioMatrix..."]
+                     , p [] [text "This may take a while."]
+                     ]
 
 
-infoBox : Html Msg
-infoBox =
+        uploadSwitch uploadState updating idle =
+            case uploadState of
+                RemoteData.NotAsked      -> idle
+                RemoteData.Loading       -> idle
+                RemoteData.Failure _     -> idle
+                RemoteData.Success state ->
+                    case state.isUploading of
+                        True  -> updating
+                        False -> idle
+
+    in
+        frame (Just "Select AudioMatrix")
+              BlueBox
+              (uploadSwitch model.amp.uploadState
+                            updateView
+                            [selector model.amp.matrixConfigs])
+
+
+
+masterVolumeView : Model -> Html Msg
+masterVolumeView model =
+    let 
+        volumeView data = case data of
+            RemoteData.Success vol ->
+                div [ class "master-volume-ctrl" ]
+                    [ p [] [text "Master Volume:"]
+                    , p [] [text ((toString vol.value) ++ "%")]
+                    ]
+            RemoteData.NotAsked    -> div [] [text "Loading..."]
+            RemoteData.Loading     -> div [] [text "Loading..."]
+            RemoteData.Failure err -> div [ class "error" ]
+                                          [ text (toString err) ]
+
+    in
+        frame Nothing
+              GreyBox 
+              [ volumeView model.amp.masterVolume ]
+
+
+infoBox : Model -> Html Msg
+infoBox model =
     frame Nothing
-          BlueBox
-          [ p [] [text "Today Is Prickel Prickle"]
-          , p [] [text "23:42:42 @ 2017-23-42" ]
+          BlueBox 
+          [ p [] [text (formatTime model.now)]
           ]
+
+
+formatTime : Time -> String
+formatTime t =
+    Time.Format.format "%a %b %d %H:%M:%S %Y" t
+
 
 fooBox : Html Msg
 fooBox =
@@ -83,15 +171,15 @@ fooBox =
 view : Model -> Html Msg
 view model =
     applicationView (Just [ div []
-                                [text "Left sidebar"]
+                                [ audioMatrixSelector model ]
                           ])
                     [ div []
-                          [ masterVolume
+                          [ 
                           ]
                     ]
                     (Just [ div []
-                                [ infoBox
-                                , fooBox
+                                [ infoBox model
+                                , masterVolumeView model 
                                 ]
 
                           ]) 
@@ -104,7 +192,10 @@ update msg model =
         Nop -> (model, Cmd.none)
 
         -- Current Time
-        Tick time -> ({model | now = time}, Cmd.none)
+        Tick time -> updateTime model time 
+
+        -- Events
+        SetAudioMatrix id -> setAudioMatrix model id
     
         -- RemoteData
         AmpStateResponse state            -> updateAmpState model state
@@ -112,6 +203,30 @@ update msg model =
         MasterVolumeResponse masterVolume -> updateMasterVolume model masterVolume
         MatrixConfigsListResponse configs -> updateMatrixConfigsList model configs 
 
+
+
+updateTime : Model -> Time -> (Model, Cmd Msg)
+updateTime model t =
+    -- Handle periodic tasks
+    let 
+        cmd = case ((truncate t) % 3 == 0) of
+            True -> case model.pollUploadState of
+                         True  -> getUploadState
+                         False -> Cmd.none
+
+            False -> Cmd.none
+
+        nextModel = {model | now = t}
+    in
+        (nextModel, cmd)
+
+
+
+setAudioMatrix : Model -> Int -> (Model, Cmd Msg)
+setAudioMatrix model id =
+    ( {model | pollUploadState = True}
+    , setMatrixConfig id
+    )
 
 
 updateAmpState : Model -> WebData AmpState -> (Model, Cmd Msg)
@@ -128,8 +243,13 @@ updateUploadState model state =
     let
         amp = model.amp
         next = {amp | uploadState = state}
+        pollState = case state of
+            RemoteData.Success s -> s.isUploading
+            RemoteData.Failure _ -> False
+            RemoteData.NotAsked  -> False
+            RemoteData.Loading   -> False
     in 
-        ({model | amp = next}, Cmd.none)
+        ({model | amp = next, pollUploadState = pollState}, Cmd.none)
 
 
 updateMasterVolume : Model -> WebData MasterVolume -> (Model, Cmd Msg)
@@ -155,5 +275,5 @@ updateMatrixConfigsList model configs =
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Time.every Time.second Tick
 

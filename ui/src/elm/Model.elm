@@ -16,11 +16,12 @@ import RemoteData exposing (RemoteData, WebData)
 type alias Model =
     { amp : Amp
     , now : Time
+    , pollUploadState : Bool
     }
 
 initialModel : Model
 initialModel =
-    Model initialAmp initialTime
+    Model initialAmp initialTime False
 
 initialTime : Time
 initialTime = 0
@@ -53,7 +54,7 @@ type alias MasterVolume = { value : Float }
 type alias AudioMatrixConfig =
     { id : Int
     , name : String
-    , selected : Bool
+    , isSelected : Bool
     }
 
 type alias AudioMatrixUploadState =

@@ -59,3 +59,10 @@ GET /api/matrix-config/configs
   ]
 }
 
+POST /api/matrix-config/configs
+{
+  "state": {
+    "error": null, 
+     "is_uploading": true
+  }
+}

@@ -3,9 +3,9 @@ module Messages exposing ( Msg(..)
                          , getMasterVolume
                          , setMasterVolume
                          , getMatrixConfigs
+                         , setMatrixConfig
+                         , getUploadState
                          )
-
-import Debug
 
 import Http
 import Json.Decode as Decode exposing (Decoder)
@@ -24,6 +24,7 @@ import Model exposing ( AmpState
 type Msg
     = Nop
     | Tick Time
+    | SetAudioMatrix Int
     | AmpStateResponse (WebData AmpState)
     | MasterVolumeResponse (WebData MasterVolume)
     | UploadStateResponse (WebData AudioMatrixUploadState)
@@ -56,8 +57,7 @@ setMasterVolume : Float -> Cmd Msg
 setMasterVolume volume = 
     let
         endpoint = "/api/volume/master"
-        body = Http.stringBody "application/json"
-                               (encodeMasterVolume volume)
+        body = Http.jsonBody (encodeMasterVolume volume)
     in
         Http.post endpoint body masterVolumeDecoder
             |> RemoteData.sendRequest
@@ -75,12 +75,24 @@ getMatrixConfigs =
 
 
 setMatrixConfig : Int -> Cmd Msg
-setMatrixConfig =
-    let endpoint = "/api/matrix-config/configs"
+setMatrixConfig configId =
+    let
+        endpoint = "/api/matrix-config/configs"
+        body = Http.jsonBody (audioMatrixUploadEncoder configId)
     in
         Http.post endpoint body uploadStateDecoder
             |> RemoteData.sendRequest
-            |> Cmd.map MatrixConfigUploadStateResponse
+            |> Cmd.map UploadStateResponse 
+
+
+
+getUploadState : Cmd Msg
+getUploadState =
+    let endpoint = "/api/matrix-config/upload-state"
+    in
+        Http.get endpoint uploadStateDecoder
+            |> RemoteData.sendRequest
+            |> Cmd.map UploadStateResponse
 
 
 -- DECODERS / ENCODERS
@@ -98,12 +110,9 @@ masterVolumeDecoder =
         |> requiredAt ["volume", "master"] Decode.float
 
 
-encodeMasterVolume : Float -> String 
+encodeMasterVolume : Float -> Encode.Value
 encodeMasterVolume volume =
-    encode 0
-        ( object
-            [ ("volume", Encode.float volume) ]
-        ) 
+    Encode.object [ ("volume", Encode.float volume) ]
 
 
 apiConfigsDecoder : Decoder (List AudioMatrixConfig)
@@ -118,5 +127,18 @@ audioMatrixConfigDecoder =
         |> required "name" Decode.string
         |> required "selected" Decode.bool
 
-uploadStateDecoder : Decoder UploadState
+
+audioMatrixUploadEncoder : Int -> Encode.Value
+audioMatrixUploadEncoder configId =
+    Encode.object [ ("id", Encode.int configId) ]
+
+
+uploadStateDecoder : Decoder AudioMatrixUploadState 
+uploadStateDecoder =
+    decode AudioMatrixUploadState
+        |> requiredAt ["state", "is_uploading"] Decode.bool
+        |> requiredAt ["state", "error"] (Decode.maybe Decode.string)
+
+
+
 
