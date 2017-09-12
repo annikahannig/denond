@@ -8,7 +8,7 @@ import atexit
 
 import requests
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 
 from denond import denon
 from denond import matrix_config_manager
@@ -104,6 +104,11 @@ def select_audio_matrix_config():
     res = config_manager.upload(config_file)
     return jsonify({'state': res})
 
+
+
+@app.route("/app/<path:path>")
+def serve_app(path):
+    return send_from_directory("ui/build", path)
 
 
 if __name__ == '__main__':
