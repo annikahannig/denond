@@ -74,9 +74,8 @@ audioMatrixSelector : Model -> Html Msg
 audioMatrixSelector model =
     let
         isSelected selected =
-            case selected of
-                True -> " (selected)"
-                False -> ""
+            if selected then " (selected)"
+                        else ""
 
         matrixView audioMatrix =
             div [ class "audio-matrix" ]
@@ -112,9 +111,8 @@ audioMatrixSelector model =
                 RemoteData.Loading       -> idle
                 RemoteData.Failure _     -> idle
                 RemoteData.Success state ->
-                    case state.isUploading of
-                        True  -> updating
-                        False -> idle
+                    if state.isUploading then updating
+                                         else idle
 
     in
         frame (Just "Select AudioMatrix")
@@ -209,12 +207,10 @@ updateTime : Model -> Time -> (Model, Cmd Msg)
 updateTime model t =
     -- Handle periodic tasks
     let 
-        cmd = case ((truncate t) % 3 == 0) of
-            True -> case model.pollUploadState of
-                         True  -> getUploadState
-                         False -> Cmd.none
-
-            False -> Cmd.none
+        cmd = if ((truncate t) % 3 == 0) then
+                    if model.pollUploadState then getUploadState
+                                             else Cmd.none
+              else Cmd.none
 
         nextModel = {model | now = t}
     in
