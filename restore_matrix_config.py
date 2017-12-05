@@ -4,6 +4,7 @@
 import argparse
 
 from denond import denon
+from denond import matrix_config
 
 
 def parse_args():
@@ -28,7 +29,7 @@ def main():
     client = denon.Client(args.host)
     conf = matrix_config.MatrixConfig.from_file(args.filename)
 
-    client.write_matrix_config(conf)
+    client.update_matrix_config(conf)
     print("[+] Done.")
 
 if __name__ == "__main__":
