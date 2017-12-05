@@ -4,14 +4,13 @@ Denon telnet api and web "api" client
 """
 
 import socket
-import utils
 import time
 import requests
 
-import matrix_config
-
-from webinterface import scraper
-from matrix_config import MatrixConfig
+from denond import matrix_config
+from denond import utils
+from denond.webinterface import scraper
+from denond.matrix_config import MatrixConfig
 
 COMMAND_TIMEOUT = 0.135
 

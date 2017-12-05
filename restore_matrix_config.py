@@ -30,3 +30,7 @@ def main():
 
     client.write_matrix_config(conf)
     print("[+] Done.")
+
+if __name__ == "__main__":
+    main()
+

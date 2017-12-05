@@ -8,7 +8,7 @@ import re
 import time
 import threading
 
-from Queue import Queue
+from queue import Queue
 
 def round_halfstep(value):
     """Round value to 0.5 for half steps"""
